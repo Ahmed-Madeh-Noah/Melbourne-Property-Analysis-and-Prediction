@@ -5,4 +5,4 @@ physical and transactional features, with full pipeline: data cleaning, feature 
 data preprocessing, model training, comparison, evaluation, and deployment.
 
 **Dataset Source:** This project uses the Melbourne Housing Market dataset provided
-by [YBI Foundation](https://github.com/YBI-Foundation/Dataset/blob/main/Melbourne%20Housing%20Market.csv).
+by [Tony Pino](https://www.kaggle.com/datasets/anthonypino/melbourne-housing-market).
