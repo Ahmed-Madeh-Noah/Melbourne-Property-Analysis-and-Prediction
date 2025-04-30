@@ -1,3 +1,9 @@
+# Custom ignores
+.idea
+.vscode
+.ipynb_checkpoints
+catboost_info
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
