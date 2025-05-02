@@ -63,7 +63,7 @@ def format_df_cells(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def reorder_df_columns(df: pd.DataFrame) -> pd.DataFrame:
-    df = df[df.select_dtypes(include=object).columns.tolist() + df.select_dtypes(exclude=object).columns.tolist()]
+    df = df[sorted(df.select_dtypes(include=object).columns.tolist()) + sorted(df.select_dtypes(exclude=object).columns.tolist())]
     columns = ["SaleDate"] + [column for column in df.columns if column not in ["SaleDate", "Price"]] + ["Price"]
     df = df[columns]
     return df

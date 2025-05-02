@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from data_manipulation.data_cleaning import reorder_df_columns
 
 
 def remove_column(df: pd.DataFrame, col: str) -> pd.DataFrame:
@@ -68,4 +69,5 @@ if __name__ == "__main__":
     dataset["PropertyAge"] = dataset.apply(calc_property_age, axis=1)
     dataset["AvgRoomSize"] = dataset.apply(calc_avg_room_size, axis=1)
     dataset["BuildingToLandRatio"] = dataset.apply(calc_building_to_land_ratio, axis=1)
+    dataset = reorder_df_columns(dataset)
     dataset.to_csv("../data/ENGINEERED_Melbourne_Housing_Market.csv", index=False)
