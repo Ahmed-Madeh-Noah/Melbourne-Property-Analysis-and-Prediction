@@ -2,15 +2,6 @@ import pandas as pd
 import numpy as np
 
 
-def separate_date(row: pd.Series) -> pd.Series:
-    sale_date = pd.to_datetime(row["SaleDate"])
-    year = sale_date.year
-    quarter = sale_date.quarter
-    month = sale_date.month
-    day = sale_date.dayofweek
-    return pd.Series({"Year": year, "Quarter": quarter, "Month": month, "Day": day})
-
-
 def remove_column(df: pd.DataFrame, col: str) -> pd.DataFrame:
     df.drop(columns=[col], inplace=True)
     return df
@@ -54,7 +45,7 @@ def get_full_street_type(row: pd.Series) -> str:
 
 
 def calc_property_age(row: pd.Series) -> np.float64:
-    return row["Year"] - row["YearBuilt"]
+    return row["SaleDate"].year - row["YearBuilt"]
 
 
 def calc_avg_room_size(row: pd.Series) -> np.float64:
@@ -69,13 +60,12 @@ def calc_building_to_land_ratio(row: pd.Series) -> np.float64:
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("../data/CLEANED_Melbourne_Housing_Market.csv")
-    df[["Year", "Quarter", "Month", "Day"]] = df.apply(separate_date, axis=1)
-    df = remove_column(df, "SaleDate")
-    df[["StreetName", "StreetType"]] = df.apply(separate_address, axis=1)
-    df["StreetType"] = df.apply(get_full_street_type, axis=1)
-    df = remove_column(df, "Address")
-    df["PropertyAge"] = df.apply(calc_property_age, axis=1)
-    df["AvgRoomSize"] = df.apply(calc_avg_room_size, axis=1)
-    df["BuildingToLandRatio"] = df.apply(calc_building_to_land_ratio, axis=1)
-    df.to_csv("../data/ENGINEERED_Melbourne_Housing_Market.csv", index=False)
+    dataset = pd.read_csv("../data/CLEANED_Melbourne_Housing_Market.csv")
+    dataset["SaleDate"] = pd.to_datetime(dataset["SaleDate"])
+    dataset[["StreetName", "StreetType"]] = dataset.apply(separate_address, axis=1)
+    dataset["StreetType"] = dataset.apply(get_full_street_type, axis=1)
+    dataset = remove_column(dataset, "Address")
+    dataset["PropertyAge"] = dataset.apply(calc_property_age, axis=1)
+    dataset["AvgRoomSize"] = dataset.apply(calc_avg_room_size, axis=1)
+    dataset["BuildingToLandRatio"] = dataset.apply(calc_building_to_land_ratio, axis=1)
+    dataset.to_csv("../data/ENGINEERED_Melbourne_Housing_Market.csv", index=False)
