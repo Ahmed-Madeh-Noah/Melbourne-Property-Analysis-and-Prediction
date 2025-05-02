@@ -12,7 +12,7 @@ def correct_column_names(df: pd.DataFrame) -> pd.DataFrame:
 
 def convert_floats_to_ints(df: pd.DataFrame) -> pd.DataFrame:
     should_be_float_columns = ["DistanceToCBD", "BuildingArea", "Latitude", "Longitude"]
-    should_be_int_columns = [column for column in df.select_dtypes(include=[int, float]).columns if
+    should_be_int_columns = [column for column in df.select_dtypes(include="number").columns if
                              column not in should_be_float_columns]
     for column in should_be_int_columns:
         df[column] = pd.to_numeric(df[column], errors="coerce").astype("Int64")
@@ -47,7 +47,7 @@ def format_df_cells(df: pd.DataFrame) -> pd.DataFrame:
             return {char for cell in text_data for char in cell if not char.isalnum()}
 
         non_alpha_num_chars = get_non_alpha_num_chars(input_df)
-        for column in input_df.select_dtypes(include=object).columns:
+        for column in input_df.select_dtypes(include="object").columns:
             input_df[column] = input_df[column].str.strip().str.title()
             for non_alpha_num_char in non_alpha_num_chars:
                 input_df[column] = input_df[column].str.replace(non_alpha_num_char, "_")
@@ -63,7 +63,7 @@ def format_df_cells(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def reorder_df_columns(df: pd.DataFrame) -> pd.DataFrame:
-    df = df[sorted(df.select_dtypes(include=object).columns.tolist()) + sorted(df.select_dtypes(exclude=object).columns.tolist())]
+    df = df[sorted(df.select_dtypes(include="object").columns.tolist()) + sorted(df.select_dtypes(exclude="object").columns.tolist())]
     columns = ["SaleDate"] + [column for column in df.columns if column not in ["SaleDate", "Price"]] + ["Price"]
     df = df[columns]
     return df
@@ -74,11 +74,11 @@ def estimate_nulls(df: pd.DataFrame, remove_price=False) -> pd.DataFrame:
         df.dropna(subset=["Price"], inplace=True)
     imputer = SimpleImputer(strategy="median")
     df["SaleDate"] = df["SaleDate"].astype("int64")
-    df[df.select_dtypes(include=[int, float]).columns] = imputer.fit_transform(
-        df[df.select_dtypes(include=[int, float]).columns])
+    df[df.select_dtypes(include="number").columns] = imputer.fit_transform(
+        df[df.select_dtypes(include="number").columns])
     df["SaleDate"] = pd.to_datetime(df["SaleDate"])
     imputer = SimpleImputer(strategy="most_frequent")
-    df[df.select_dtypes(include=object).columns] = imputer.fit_transform(df[df.select_dtypes(include=object).columns])
+    df[df.select_dtypes(include="object").columns] = imputer.fit_transform(df[df.select_dtypes(include="object").columns])
     return df
 
 
