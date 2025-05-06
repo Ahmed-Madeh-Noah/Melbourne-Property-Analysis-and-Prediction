@@ -56,9 +56,6 @@ def get_custom_description(df: pd.DataFrame) -> pd.DataFrame:
 
 if __name__ == "__main__":
     dataset = pd.read_csv("../data/ENGINEERED_Melbourne_Housing_Market.csv")
-    dataset["SaleDate"] = pd.to_datetime(dataset["SaleDate"])
-    dataset_description = get_custom_description(dataset)
-    print(dataset_description)
     dataset = remove_column(dataset, "StreetName")
     dataset = remove_column(dataset, "SaleMethod")
     dataset = remove_column(dataset, "StreetType")
