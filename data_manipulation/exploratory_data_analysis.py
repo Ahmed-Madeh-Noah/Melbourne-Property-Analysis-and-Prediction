@@ -4,7 +4,8 @@ import math
 import matplotlib.pyplot as plt
 
 
-def remove_outliers(df: pd.DataFrame, method="IQR") -> pd.DataFrame:
+def remove_outliers(df_input: pd.DataFrame, method="IQR") -> pd.DataFrame:
+    df = df_input.copy()
     for col in df.select_dtypes(include="number").columns:
         outliers = get_outliers(df, col, method)
         df = df[~df.index.isin(outliers.index)]
@@ -18,7 +19,8 @@ def safe_round(val: float) -> float:
         return val
 
 
-def get_outliers(df: pd.DataFrame, col: str, method: str = "iqr") -> pd.DataFrame:
+def get_outliers(df_input: pd.DataFrame, col: str, method: str = "iqr") -> pd.DataFrame:
+    df = df_input.copy()
     outliers = pd.DataFrame()
     if method == "iqr":
         q1, q3 = df[col].quantile(0.25), df[col].quantile(0.75)
@@ -31,7 +33,8 @@ def get_outliers(df: pd.DataFrame, col: str, method: str = "iqr") -> pd.DataFram
     return outliers
 
 
-def get_custom_description(df: pd.DataFrame) -> pd.DataFrame:
+def get_custom_description(df_input: pd.DataFrame) -> pd.DataFrame:
+    df = df_input.copy()
     description = df.describe(include="all").T
     description["MajorityPercentage"] = description["freq"] / description["count"]
     description["Range"] = description["max"] - description["min"]
@@ -56,7 +59,8 @@ def get_custom_description(df: pd.DataFrame) -> pd.DataFrame:
     return description.T
 
 
-def top_n_filter(df: pd.DataFrame, col: str, n: int = 5) -> pd.DataFrame:
+def top_n_filter(df_input: pd.DataFrame, col: str, n: int = 5) -> pd.DataFrame:
+    df = df_input.copy()
     column_value_counts = df[col].value_counts()
     top_n_values = column_value_counts.head(n).index
     df[col] = df[col].apply(lambda value: value if value in top_n_values else "Other")

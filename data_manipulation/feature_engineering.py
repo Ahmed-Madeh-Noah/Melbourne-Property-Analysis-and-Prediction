@@ -3,7 +3,8 @@ import numpy as np
 from data_manipulation.data_cleaning import reorder_df_columns
 
 
-def remove_column(df: pd.DataFrame, col: str) -> pd.DataFrame:
+def remove_column(df_input: pd.DataFrame, col: str) -> pd.DataFrame:
+    df = df_input.copy()
     df.drop(columns=[col], inplace=True)
     return df
 
