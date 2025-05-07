@@ -61,3 +61,5 @@ if __name__ == "__main__":
     dataset = remove_column(dataset, "StreetType")
     dataset = remove_column(dataset, "UnitType")
     dataset = remove_outliers(dataset, "zcore")
+    dataset = dataset[dataset["YearBuilt"] >= dataset["YearBuilt"].median() - (
+                dataset["YearBuilt"].max() - dataset["YearBuilt"].median())]
