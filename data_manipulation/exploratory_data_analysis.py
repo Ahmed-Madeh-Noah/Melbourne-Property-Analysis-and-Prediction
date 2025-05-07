@@ -1,5 +1,7 @@
 import pandas as pd
 from data_manipulation.feature_engineering import remove_column
+import math
+import matplotlib.pyplot as plt
 
 
 def remove_outliers(df: pd.DataFrame, method="IQR") -> pd.DataFrame:
@@ -54,12 +56,29 @@ def get_custom_description(df: pd.DataFrame) -> pd.DataFrame:
     return description.T
 
 
+def top_n_filter(df: pd.DataFrame, col: str, n: int = 5) -> pd.DataFrame:
+    column_value_counts = df[col].value_counts()
+    top_n_values = column_value_counts.head(n).index
+    df[col] = df[col].apply(lambda value: value if value in top_n_values else "Other")
+    return df
+
+
+def plot_these(*funcs, **kwargs) -> None:
+    _, axes = plt.subplots((len(funcs) + 1) // 2, 2, figsize=(10, 2 * len(funcs)))
+    axes = axes.ravel()
+    for index, plot in enumerate(funcs):
+        plot(**kwargs, ax=axes[index])
+    plt.tight_layout()
+    plt.show()
+
+
 if __name__ == "__main__":
     dataset = pd.read_csv("../data/ENGINEERED_Melbourne_Housing_Market.csv")
+    dataset["SaleDate"] = pd.to_datetime(dataset["SaleDate"])
     dataset = remove_column(dataset, "StreetName")
     dataset = remove_column(dataset, "SaleMethod")
     dataset = remove_column(dataset, "StreetType")
     dataset = remove_column(dataset, "UnitType")
-    dataset = remove_outliers(dataset, "zcore")
-    dataset = dataset[dataset["YearBuilt"] >= dataset["YearBuilt"].median() - (
-                dataset["YearBuilt"].max() - dataset["YearBuilt"].median())]
+    dataset = top_n_filter(dataset, "RealEstateAgent", 32)
+    dataset = top_n_filter(dataset, "Suburb", 32)
+    dataset = remove_outliers(dataset, "zscore")
