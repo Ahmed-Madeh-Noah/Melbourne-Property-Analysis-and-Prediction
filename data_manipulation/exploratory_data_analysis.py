@@ -1,6 +1,5 @@
 import pandas as pd
 from data_manipulation.feature_engineering import remove_column
-import math
 import matplotlib.pyplot as plt
 
 
@@ -59,7 +58,7 @@ def get_custom_description(df_input: pd.DataFrame) -> pd.DataFrame:
     return description.T
 
 
-def top_n_filter(df_input: pd.DataFrame, col: str, n: int = 5) -> pd.DataFrame:
+def top_n_filter(df_input: pd.DataFrame, col: str, n: int = 10) -> pd.DataFrame:
     df = df_input.copy()
     column_value_counts = df[col].value_counts()
     top_n_values = column_value_counts.head(n).index
@@ -74,6 +73,18 @@ def plot_these(*funcs, **kwargs) -> None:
         plot(**kwargs, ax=axes[index])
     plt.tight_layout()
     plt.show()
+
+
+def plot_pie_chart(df_input: pd.DataFrame, col: str, show=True, ax=None) -> None:
+    df = df_input.copy()
+    df = top_n_filter(df, col)
+    values = df[col].value_counts()
+    if ax is None:
+        ax = plt.gca()
+    ax.pie(values, labels=values.index, autopct='%1.1f%%')
+    ax.set_title(col)
+    if show:
+        plt.show()
 
 
 if __name__ == "__main__":
