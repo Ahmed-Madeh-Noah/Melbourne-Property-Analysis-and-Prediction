@@ -66,8 +66,8 @@ def top_n_filter(df_input: pd.DataFrame, col: str, n: int = 10) -> pd.DataFrame:
     return df
 
 
-def plot_these(*funcs, **kwargs) -> None:
-    _, axes = plt.subplots((len(funcs) + 1) // 2, 2, figsize=(10, 2 * len(funcs)))
+def plot_univariates(*funcs, **kwargs) -> None:
+    _, axes = plt.subplots((len(funcs) + 1) // 2, 2, figsize=(10, int(2.5 * len(funcs))))
     axes = axes.ravel()
     for index, plot in enumerate(funcs):
         plot(**kwargs, ax=axes[index])
@@ -85,6 +85,21 @@ def plot_pie_chart(df_input: pd.DataFrame, col: str, show=True, ax=None) -> None
     ax.set_title(col)
     if show:
         plt.show()
+
+
+def plot_bivariates(df_input: pd.DataFrame, x_column: str, plot, *y_columns) -> None:
+    df = df_input.copy()
+    if x_column in df.select_dtypes(exclude="number").columns:
+        df = top_n_filter(df, x_column, 5)
+    _, axes = plt.subplots((len(y_columns) + 1) // 2, 2, figsize=(10, int(2.5 * len(y_columns))))
+    axes = axes.ravel()
+    for index, y_column in enumerate(y_columns):
+        if y_column in df.select_dtypes(exclude="number").columns:
+            df = top_n_filter(df, y_column, 5)
+        plot(data=df, x=x_column, y=y_column, ax=axes[index])
+        axes[index].tick_params(axis='x', rotation=30)
+    plt.tight_layout()
+    plt.show()
 
 
 if __name__ == "__main__":
