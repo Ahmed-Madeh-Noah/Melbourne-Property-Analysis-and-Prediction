@@ -125,3 +125,4 @@ if __name__ == "__main__":
     dataset = top_n_filter(dataset, "RealEstateAgent", 32)
     dataset = top_n_filter(dataset, "Suburb", 32)
     dataset = remove_outliers(dataset, "zscore")
+    dataset.to_csv("../data/ANALYSED_Melbourne_Housing_Market.csv", index=False)
