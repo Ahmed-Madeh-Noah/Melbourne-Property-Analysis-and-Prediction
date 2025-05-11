@@ -1,6 +1,7 @@
 import pandas as pd
 from data_manipulation.feature_engineering import remove_column
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 def remove_outliers(df_input: pd.DataFrame, method="IQR") -> pd.DataFrame:
@@ -98,6 +99,18 @@ def plot_bivariates(df_input: pd.DataFrame, x_column: str, plot, *y_columns) -> 
             df = top_n_filter(df, y_column, 5)
         plot(data=df, x=x_column, y=y_column, ax=axes[index])
         axes[index].tick_params(axis='x', rotation=30)
+    plt.tight_layout()
+    plt.show()
+
+
+def scatter_with_hues(df_input: pd.DataFrame, x_column: str, y_column: str, *hues) -> None:
+    df = df_input.copy()
+    _, axes = plt.subplots((len(hues) + 1) // 2, 2, figsize=(10, int(2.5 * len(hues))))
+    axes = axes.ravel()
+    for index, hue_column in enumerate(hues):
+        if hue_column in df.select_dtypes(exclude="number").columns:
+            df = top_n_filter(df, hue_column)
+        sns.scatterplot(data=df, x=x_column, y=y_column, hue=hue_column, ax=axes[index])
     plt.tight_layout()
     plt.show()
 
