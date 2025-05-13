@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from data_manipulation.data_cleaning import reorder_df_columns
+from utils.data_cleaning import reorder_df_columns
 
 
 def remove_column(df_input: pd.DataFrame, col: str) -> pd.DataFrame:

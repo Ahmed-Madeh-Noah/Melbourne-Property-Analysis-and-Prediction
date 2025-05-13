@@ -24,7 +24,7 @@ if __name__ == "__main__":
     ])
     X_train = preprocessor.fit_transform(X_train)
     X_test = preprocessor.transform(X_test)
-    joblib.dump(preprocessor, "../utils/preprocessor.pkl")
+    joblib.dump(preprocessor, "../raw/preprocessor.pkl")
     X_train_df = pd.DataFrame(X_train, columns=preprocessor.get_feature_names_out())
     X_test_df = pd.DataFrame(X_test, columns=preprocessor.get_feature_names_out())
     y_train_df = pd.DataFrame(y_train)

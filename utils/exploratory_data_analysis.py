@@ -1,5 +1,5 @@
 import pandas as pd
-from data_manipulation.feature_engineering import remove_column
+from utils.feature_engineering import remove_column
 import matplotlib.pyplot as plt
 import seaborn as sns
 
