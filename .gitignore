@@ -3,6 +3,18 @@
 .vscode
 .ipynb_checkpoints
 catboost_info
+/utils/ARDRegression
+/utils/BayesianRidge
+/utils/DecisionTreeRegressor
+/utils/ElasticNet
+/utils/GradientBoostingRegressor
+/utils/KNeighborsRegressor
+/utils/Lasso
+/utils/LinearRegression
+/utils/MLPRegressor
+/utils/RandomForestRegressor
+/utils/Ridge
+/utils/SVR
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
