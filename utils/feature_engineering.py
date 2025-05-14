@@ -64,6 +64,11 @@ def calc_building_to_land_ratio(row: pd.Series) -> np.float64:
 if __name__ == "__main__":
     dataset = pd.read_csv("../data/CLEANED_Melbourne_Housing_Market.csv")
     dataset["SaleDate"] = pd.to_datetime(dataset["SaleDate"])
+    df["SaleYear"] = df["SaleDate"].dt.year
+    df["SaleMonth"] = df["SaleDate"].dt.month
+    df["SaleDay"] = df["SaleDate"].dt.day
+    df["SaleQuarter"] = df["SaleDate"].dt.quarter
+    df["SaleDayOfWeek"] = df["SaleDate"].dt.dayofweek
     dataset[["StreetName", "StreetType"]] = dataset.apply(separate_address, axis=1)
     dataset["StreetType"] = dataset.apply(get_full_street_type, axis=1)
     dataset = remove_column(dataset, "Address")
