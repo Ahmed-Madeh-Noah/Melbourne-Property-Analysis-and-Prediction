@@ -26,7 +26,7 @@ def train_model(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: np.array, 
         evaluation.at[model_name, "r2"] = r2_score(y_test, y_pred)
         evaluation.at[model_name, "mape"] = mean_absolute_percentage_error(y_test, y_pred)
     if save:
-        joblib.dump(model, f"../raw/{model_name}")
+        joblib.dump(model, f"../raw/{model_name}.pkl")
     return evaluation
 
 
