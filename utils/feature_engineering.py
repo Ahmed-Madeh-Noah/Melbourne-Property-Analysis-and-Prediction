@@ -9,6 +9,16 @@ def remove_column(df_input: pd.DataFrame, col: str) -> pd.DataFrame:
     return df
 
 
+def separate_date(row: pd.Series) -> pd.Series:
+    sale_year = row["SaleDate"].year
+    sale_month = row["SaleDate"].month
+    sale_day = row["SaleDate"].day
+    sale_quarter = row["SaleDate"].quarter
+    sale_day_of_week = row["SaleDate"].dayofweek
+    return pd.Series({"SaleYear": sale_year, "SaleMonth": sale_month, "SaleDay": sale_day, "SaleQuarter": sale_quarter,
+                      "SaleDayOfWeek": sale_day_of_week})
+
+
 def separate_address(row: pd.Series) -> pd.Series:
     name, street_type = row["Address"].split("_")[-2:]
     return pd.Series({"StreetName": name, "StreetType": street_type})
@@ -64,11 +74,7 @@ def calc_building_to_land_ratio(row: pd.Series) -> np.float64:
 if __name__ == "__main__":
     dataset = pd.read_csv("../data/CLEANED_Melbourne_Housing_Market.csv")
     dataset["SaleDate"] = pd.to_datetime(dataset["SaleDate"])
-    df["SaleYear"] = df["SaleDate"].dt.year
-    df["SaleMonth"] = df["SaleDate"].dt.month
-    df["SaleDay"] = df["SaleDate"].dt.day
-    df["SaleQuarter"] = df["SaleDate"].dt.quarter
-    df["SaleDayOfWeek"] = df["SaleDate"].dt.dayofweek
+    dataset[["SaleYear", "SaleMonth", "SaleDay", "SaleQuarter", "SaleDayOfWeek"]] = dataset.apply(separate_date, axis=1)
     dataset[["StreetName", "StreetType"]] = dataset.apply(separate_address, axis=1)
     dataset["StreetType"] = dataset.apply(get_full_street_type, axis=1)
     dataset = remove_column(dataset, "Address")
