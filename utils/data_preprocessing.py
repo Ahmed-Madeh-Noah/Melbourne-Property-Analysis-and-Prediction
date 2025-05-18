@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder, OrdinalEncoder
 import joblib
 
 if __name__ == "__main__":
-    df = pd.read_csv("../data/ENGINEERED_Melbourne_Housing_Market.csv")
+    df = pd.read_csv("../data/ANALYSED_Melbourne_Housing_Market.csv")
     df["SaleDate"] = pd.to_datetime(df["SaleDate"])
     y = df["Price"]
     X = df.drop(columns=["Price"])
