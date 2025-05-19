@@ -2,8 +2,15 @@ import pandas as pd
 import utils.feature_engineering as fe
 import joblib
 
-preprocessor = joblib.load("../raw/preprocessor.pkl")
-model = joblib.load("../raw/GradientBoostingRegressor.pkl")
+preprocessor = None
+model = None
+
+
+def load_preprocessor_and_model(prefix: str = ""):
+    global preprocessor
+    global model
+    preprocessor = joblib.load(f"{prefix}raw/preprocessor.pkl")
+    model = joblib.load(f"{prefix}raw/GradientBoostingRegressor.pkl")
 
 
 def predict_from_input(user_input: pd.Series) -> str:
@@ -27,6 +34,7 @@ if __name__ == "__main__":
     first_row["SaleDate"] = pd.to_datetime(first_row["SaleDate"])
     real_price = first_row["Price"]
     first_row = first_row.drop("Price")
+    load_preprocessor_and_model("../")
     predict = predict_from_input(first_row)
     print("Row:")
     print(first_row)
